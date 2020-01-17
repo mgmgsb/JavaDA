@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%--
+    サイトトップのログイン画面
+    ログインボタンでHome.javaのPostを呼び出し
+    新規登録ボタンでRegister.javaのGetを呼び出し
+
+     --%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Java打TOP</title>
+</head>
+<body>
+<title>＼Ｊａｖａ打へようこそ／</title>
+<%-- ここで空白入力はメッセージで弾き、処理を渡さない --%>
+<form action="/javada/Top" method="post">
+メールアドレス<input type="text" name="mail"><br>
+　パスワード　<input type="text" name="pass"><br>
+<input type="submit" value="ログイン">　または　<a href= "/javada/Register" >新規登録</a>
+
+</body>
+</html>
