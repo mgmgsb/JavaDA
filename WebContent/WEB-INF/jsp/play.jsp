@@ -10,8 +10,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+user:<%= session.getAttribute("userName") %><br><br>
 </head>
 <body>
-
+<form action="/javada/Home" method="get">
+<input type="submit" value="終了"></form>
 </body>
 </html>

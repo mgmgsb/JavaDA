@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.Account;
 import model.RegisterLogic;
 
 /**
@@ -44,20 +43,18 @@ public class Register extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//ユーザ名、メール、パスワードを受けて,ユーザ名だけをRegisterLogicに渡す
+		RegisterLogic regLogic = new RegisterLogic();
+		String user = regLogic.register(request.getParameter("name"), request.getParameter("mail"), request.getParameter("pass"));
 
-		RegisterLogic registerLogic = new RegisterLogic();
-		Account account = registerLogic.registerCheck(request.getParameter("user"), request.getParameter("mail"), request.getParameter("pass"));
-		if(account != null) {
+		if (user != null) {
 			HttpSession session = request.getSession();
-			session.setAttribute("loginUser", account);
+			session.setAttribute("userName", user);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
 			dispatcher.forward(request, response);
 		} else {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
 			dispatcher.forward(request, response);
 		}
-
 
 
 	}

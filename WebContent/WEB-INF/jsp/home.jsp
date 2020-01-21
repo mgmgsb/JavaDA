@@ -10,8 +10,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+user:<%= session.getAttribute("userName") %><br><br>
+
 </head>
 <body>
 this is home jsp :)
+
+<form action="/javada/Play" method="get">
+<input type="submit" value="あそぶ"></form>
+<br><br>
+<form action="/javada/Top" method="get">
+<input type="submit" value="ログアウト"></form>
 </body>
 </html>

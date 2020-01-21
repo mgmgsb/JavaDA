@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Account;
 import model.LoginInfo;
@@ -22,21 +24,47 @@ public class BasicDAO {
 	 * 引数に指定されたレコードのCodeを返す
 	 * 引数に指定されたIDのプレイ日と正答数を紐づけして返す
 	 * 引数に指定されたID・プレイ日・正答数をDBに登録する
-	 *
+	 *アカウントの総数を返すメソッド
 	 *
 	 */
 
-	private final String JDBC_URL = "jdbc:h2:tcp://localhost/~/*****";
-	private final String DB_USER = "sa";
-	private final String DB_PASS = "****";
+	private static String JDBC_URL = "jdbc:h2:tcp://localhost/~/example";
+	private static String DB_USER = "sa";
+	private static String DB_PASS = "pass";
 
+
+
+//	public static void executeTest() {
+//		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
+//			//ユーザ名の重複を避けるためNAMEのみのSELECT文
+//			String searchSql = "SELECT ID, NAME, MAIL, PASS FROM ACCOUNT_TEST WHERE NAME = ?;";
+//			PreparedStatement pStmt = conn.prepareStatement(searchSql);
+//			pStmt.setString(1, );
+//
+//			ResultSet rs = pStmt.executeQuery();
+//
+//			while (rs.next()) {
+//				Account ac = new Account(rs.getString("ID"), rs.getString("NAME"),
+//						rs.getString("MAIL"), rs.getString("PASS"));
+//				results.add(ac);
+//
+//
+//			}
+//			if(results.size() > 0) return results;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			System.out.println("error001");
+//		}
+//
+//
+//	}
 
 	public Account findByLogin(LoginInfo login) {
 		Account account = null;
 
 		//DB connecting
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
-			String sql = "SELECT ID, NAME, MAIL, PASS FROM ACCOUNT WHERE MAIL = ? AND PASS = ?";
+			String sql = "SELECT ID, NAME, MAIL, PASS FROM ACCOUNT_TEST WHERE MAIL = ? AND PASS = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, login.getMail());
 			pStmt.setString(2, login.getPass());
@@ -54,40 +82,67 @@ public class BasicDAO {
 	}
 
 
-	public Account signUp(Account account) {
+	public boolean signUp(Account account) {
+		//アカウントを新規登録します
+		//後でメールの重複を避けるロジック実装必要
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
-			String selectSql = "SELECT ID, NAME, MAIL, PASS FROM ACCOUNT WHERE USER = ?";
-			String registerSql = "INSERT INTO ACCOUNT VALUES(ID, NAME, MAIL, PASS)";
-			PreparedStatement pStmt = conn.prepareStatement(selectSql);
-			pStmt.setString(1, account.getName());
+			//登録時の必要項目を記したSELECT文
+			String registerSql = "INSERT INTO ACCOUNT_TEST VALUES(?, ?, ?, ?);";
+			PreparedStatement pStmt = conn.prepareStatement(registerSql);
+
+			//アカウントにIDを割り振って登録.
+			pStmt.setString(1, account.getId());
+			pStmt.setString(2, account.getName());
+			pStmt.setString(3, account.getMail());
+			pStmt.setString(4, account.getPass());
+
+			pStmt.execute();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	public boolean searchName(String searchName) {
+		//アカウントを検索します
+		//【ここは追加機能】第一引数で受け取る検索語の指定(n/4=1->mail && n = n%4, n/2=1->name && n = n%2, n/1=1->ID)
+		//これにより複数検索を簡単に
+		List<Account> results = new ArrayList<>();
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
+			//ユーザ名の重複を避けるためNAMEのみのSELECT文
+			String searchSql = "SELECT ID, NAME, MAIL, PASS FROM ACCOUNT_TEST WHERE NAME = ?;";
+			PreparedStatement pStmt = conn.prepareStatement(searchSql);
+			pStmt.setString(1, searchName);
 
 			ResultSet rs = pStmt.executeQuery();
 
-			if (rs.next()) {
-				//結果が返った時はエラー
-				account = null;
-			} else {
-				//結果が返らなかったとき、アカウントにIDを割り振って登録.
-				account.setId("000");
-				pStmt = conn.prepareStatement(registerSql);
-				pStmt.setString(1, account.getId());
-				pStmt.setString(2, account.getName());
-				pStmt.setString(3, account.getMail());
-				pStmt.setString(4, account.getPass());
-
-				rs = pStmt.executeQuery();
-
-
+			while (rs.next()) {
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			System.out.println("error001");
 		}
-		return account;
+		return false;
 	}
 
-
-
+	public int countRecord() {
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
+			String sql = "SELECT * FROM ACCOUNT_TEST;";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+			int idCount = 0;
+			while (rs.next()) {
+				idCount++;
+			}
+			return idCount;
+		}catch (SQLException e) {
+			return -1;
+		}
+	}
 
 
 }
