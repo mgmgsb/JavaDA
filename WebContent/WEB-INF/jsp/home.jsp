@@ -15,6 +15,10 @@ user:<%= session.getAttribute("userName") %><br><br>
 </head>
 <body>
 this is home jsp :)
+<br>
+今日の回答数：<br>
+累計回答数：<br>
+
 
 <form action="/javada/Play" method="get">
 <input type="submit" value="あそぶ"></form>

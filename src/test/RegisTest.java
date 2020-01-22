@@ -10,9 +10,19 @@ public class RegisTest {
 	private static final String DB_PASS = "pass";
 
 	public static void main(String[] args) {
-		登録のテスト();
+		choiceCodeのテスト();
+//		登録のテスト();
 //		searchNameのテスト();
 //		ログインのテスト();
+	}
+
+	private static void choiceCodeのテスト() {
+		BasicDAO dao = new BasicDAO();
+		String string = dao.choiceCode();
+		System.out.println(string);
+		
+		
+		
 	}
 
 	private static void 登録のテスト() {

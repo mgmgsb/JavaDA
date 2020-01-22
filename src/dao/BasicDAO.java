@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import model.Account;
 import model.LoginInfo;
@@ -31,35 +32,12 @@ public class BasicDAO {
 	private static String JDBC_URL = "jdbc:h2:tcp://localhost/~/example";
 	private static String DB_USER = "sa";
 	private static String DB_PASS = "pass";
+	private static final int wordsAmount = 5;//出題コードの総数
 
 
-
-//	public static void executeTest() {
-//		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
-//			//ユーザ名の重複を避けるためNAMEのみのSELECT文
-//			String searchSql = "SELECT ID, NAME, MAIL, PASS FROM ACCOUNT_TEST WHERE NAME = ?;";
-//			PreparedStatement pStmt = conn.prepareStatement(searchSql);
-//			pStmt.setString(1, );
-//
-//			ResultSet rs = pStmt.executeQuery();
-//
-//			while (rs.next()) {
-//				Account ac = new Account(rs.getString("ID"), rs.getString("NAME"),
-//						rs.getString("MAIL"), rs.getString("PASS"));
-//				results.add(ac);
-//
-//
-//			}
-//			if(results.size() > 0) return results;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			System.out.println("error001");
-//		}
-//
-//
-//	}
 
 	public Account findByLogin(LoginInfo login) {
+		//ログインします
 		Account account = null;
 
 		//DB connecting
@@ -81,6 +59,30 @@ public class BasicDAO {
 		return account;
 	}
 
+
+	public String choiceCode() {
+		//WORDS_TESTからレコードを１つ持ってきて返す
+		Random r = new Random();
+		int i = r.nextInt(wordsAmount)+ 1;
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
+			String sql = "SELECT CODE FROM WORDS_TEST WHERE ID = ?;";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			pStmt.setInt(1, i);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				String s = rs.getString("CODE");
+				return s;
+			}
+			return "***Error*** Undefinition ID is selected!";
+
+		}catch (SQLException e) {
+			return "***Error*** SQLException is throwed!";
+		}
+
+
+
+	}
 
 	public boolean signUp(Account account) {
 		//アカウントを新規登録します
@@ -109,7 +111,7 @@ public class BasicDAO {
 	public boolean searchName(String searchName) {
 		//アカウントを検索します
 		//【ここは追加機能】第一引数で受け取る検索語の指定(n/4=1->mail && n = n%4, n/2=1->name && n = n%2, n/1=1->ID)
-		//これにより複数検索を簡単に
+		//第二引数をString配列に。これらにより複数検索を簡単に
 		List<Account> results = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
 			//ユーザ名の重複を避けるためNAMEのみのSELECT文
@@ -130,6 +132,7 @@ public class BasicDAO {
 	}
 
 	public int countRecord() {
+		//AccountのID振りのための既存検索。オートインクリメントにして破棄すべきメソッド
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)){
 			String sql = "SELECT * FROM ACCOUNT_TEST;";
 			PreparedStatement pStmt = conn.prepareStatement(sql);

@@ -17,6 +17,6 @@
 　ユーザー名　<input type="text" name="name"><br>
 メールアドレス<input type="text" name="mail"><br>
 　パスワード　<input type="text" name="pass"><br>
-<input type="submit" value="新規登録">　または　<a href= "/javada/Top" >ログイン</a>
+<input type="submit" value="新規登録"></form>　または　<a href= "/javada/Top" >ログイン</a>
 </body>
 </html>

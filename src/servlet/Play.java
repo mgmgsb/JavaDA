@@ -8,6 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import dao.BasicDAO;
 
 /**
  * Servlet implementation class Play
@@ -34,8 +37,23 @@ public class Play extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
+		 * DAOでDBからレコードを引っ張ってきて
+		 * セッションスコープに入れ、JSPにフォワードする。
+		 * JSPでセッションスコープからレコードを表示し、フォームで受けたコードをまたセッションスコープに
+		 * サーブレットからチェックロジックに渡して結果次第でログ追加もしくは再解答
+		 *
+		 */
+
+		HttpSession session = request.getSession();
+		BasicDAO dao = new BasicDAO();
+		String code = dao.choiceCode();
+
+		session.setAttribute("code", code);
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/play.jsp");
 		dispatcher.forward(request, response);
+
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
