@@ -23,6 +23,7 @@ public class Register extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -35,6 +36,9 @@ public class Register extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RegisterLogic regLogic = new RegisterLogic();
+		String user = regLogic.register(request.getParameter("name"), request.getParameter("mail"), request.getParameter("pass"), request.getParameter("repass"));
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/register.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -44,7 +48,7 @@ public class Register extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RegisterLogic regLogic = new RegisterLogic();
-		String user = regLogic.register(request.getParameter("name"), request.getParameter("mail"), request.getParameter("pass"));
+		String user = regLogic.register(request.getParameter("name"), request.getParameter("mail"), request.getParameter("pass"), request.getParameter("repass"));
 
 		if (user != null) {
 			HttpSession session = request.getSession();

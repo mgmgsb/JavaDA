@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.BasicDAO;
+import model.CodeLogic;
 
 /**
  * Servlet implementation class Play
@@ -59,7 +60,12 @@ public class Play extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		CodeLogic cCheck = new CodeLogic();
+		if(cCheck.codeCheck(request.getParameter("ans"))) {
+			//コードチェックが通ったらセッションスコープの本日正答数を追加
+			//ACCOUNT＿TABLEに総回答数と本日の回答数を追加
+
+		}
 		doGet(request, response);
 	}
 

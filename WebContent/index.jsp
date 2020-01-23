@@ -1,3 +1,4 @@
+<%@page import="model.ErrorCaution"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%--
@@ -6,6 +7,9 @@
     新規登録ボタンでRegister.javaのGetを呼び出し
 
      --%>
+     <%
+     String eMessage = ErrorCaution.caution();
+     %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +18,10 @@
 </head>
 <body>
 <title>＼Ｊａｖａ打へようこそ／</title>
-<%-- ここで空白入力はメッセージで弾き、処理を渡さない --%>
+
+<p>
+<%= eMessage %>
+</p>
 <form action="/javada/Top" method="post">
 メールアドレス<input type="text" name="mail"><br>
 　パスワード　<input type="text" name="pass"><br>

@@ -10,4 +10,8 @@ public class CodeLogic {
 	 * HistoryDAOを用いてプレイ記録を登録する
 	 *
 	 */
+	public boolean codeCheck(String s) {
+		//現状はFalse判定なし
+		return true;
+	}
 }
