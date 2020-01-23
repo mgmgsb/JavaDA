@@ -48,8 +48,18 @@ public class Register extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RegisterLogic regLogic = new RegisterLogic();
-		String user = regLogic.register(request.getParameter("name"), request.getParameter("mail"), request.getParameter("pass"), request.getParameter("repass"));
-
+		if(regLogic.registerCheck(request.getParameter("name"), request.getParameter("mail"), request.getParameter("pass"), request.getParameter("repass"))
+		) {
+			//入力されたユーザー名、メール、パスワードの書式が正しい場合は登録メソッドを呼ぶ
+			
+		
+		} else {
+			//正しくない場合はsessionからerrorメッセージ引数を取り出して表示しながらJSPにフォワード
+			
+			
+		}
+		
+		
 		if (user != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("userName", user);

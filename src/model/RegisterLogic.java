@@ -15,8 +15,15 @@ public class RegisterLogic {
 	public RegisterLogic(){	}
 
 
-
-	public String register(String name, String mail, String pass, String repass) {
+	
+	public boolean registerCheck(String name, String mail, String pass, String repass) {
+		//register.jspから受け取った入力の書式が正しいか確認してた
+		
+	}
+	
+	
+	
+	public String register(String name, String mail, String pass) {
 		//成功した場合はユーザーネームを返し、失敗したらエラーメッセージを返す・・・ん？
 		//
 		//DAOにログインの是非を問い、成功ならばセッションスコープに"USER_DATA"を格納してHome.javaのGet呼び出し
@@ -36,5 +43,5 @@ public class RegisterLogic {
 
 	}
 
-	public 
+
 }
